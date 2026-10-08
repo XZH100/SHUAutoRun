@@ -1,0 +1,10 @@
+{
+  "name": "矩形示例路线",
+  "coordinateSystem": "gcj02",
+  "points": [
+    { "latitude": 31.319498, "longitude": 121.392710 },
+    { "latitude": 31.320498, "longitude": 121.392710 },
+    { "latitude": 31.320498, "longitude": 121.394710 },
+    { "latitude": 31.319498, "longitude": 121.394710 }
+  ]
+}

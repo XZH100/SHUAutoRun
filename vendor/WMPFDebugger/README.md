@@ -1,0 +1,174 @@
+# WMPFDebugger
+
+[English](README.md) | [中文](README.zh.md)
+
+Yet another WeChat Mini-Program Framework (WMPF) debugger.
+
+This debugger (tweak) exploits Remote Debug feature provided by wechatdevtools and patches serval restrictions to force miniapp runtime to support full Chrome Debug Protocol, and thus can be directly applied to standard devtools shipped with chromium-based browsers.
+
+
+## Support Status
+
+### Windows (x86_64) Support
+
+**Version histories:**
+
+* **auto-detect** (beta)
+* 25715 (latest)
+* 25710 (credit @sundaqiang)
+* 25558 (credit @potacotion, @bingkxu)
+* 25510 (credit @potacotion)
+* 25459 (credit @1147529365)
+* 25364 (credit @lyratu)
+
+<details>
+
+<summary>Older versions</summary>
+
+* 25297 (credit @Yinuo0602, @82539474)
+* 25268 (credit @RuntimeBroker)
+* 20089 (credit @lovejiuwu)
+* 20079 (credit @LiuYJia, @82539474)
+* 20005 (credit @LiuYJia)
+* 20001 (credit @B1397KB)
+* 19977 (credit @B1397KB, @yunm90872-ui, @chengzongcai)
+* 19921
+* 19899 (credit @mathmonkeyliu)
+* 19881 (credit @WIAIV)
+* 19871
+* 19841 (credit @AwangYes)
+* 19823 (credit @mathmonkeyliu)
+* 19769
+* 19749 (credit @xiaoriri, @Alfalfaaaa, @chengzongcai)
+* 19481 (credit @cosalone, @jiangjie)
+* 19459 (credit @snowflake-x)
+* 19339 (credit @hidacow)
+* 19201 (credit @hidacow)
+* 19027 (credit @XKaguya)
+* 18955 (credit @MapleLeaf2007)
+* 18891 (credit @1357310795)
+* 18787
+* 18151 (credit @1437649480, @zxjBigPower)
+* 18055 (credit @Howard20181)
+* 17127 (credit @Howard20181)
+* 17071 (credit @hyzaw)
+* 17037 (credit @linguo2625469)
+* 16965
+* 16815
+* 16771
+* 16467 (credit @51-xinyu)
+* 16389 (credit @liding58)
+* 16203 (credit @liding58)
+* 16133 (credit @liding58)
+* 14315 (credit @liding58)
+* 14199
+* 14161
+* 13909
+* 13871
+* 13655
+* 13639
+* 13487
+* 13341
+* 13331
+* 11633
+* 11581 (unstable, will connect but crash renderer, feel free to test)
+
+</details>
+
+To use auto-detect feature (currently beta), simply add `--auto-detect` in your launch arguments
+
+To check your installed version, navigate to Task Manager -> WeChatAppEx -> Right click -> Open file location -> Check the number between `RadiumWMPF` and `extracted`.
+
+To adapt to another version, please find the instructions in [ADAPTATION.md](ADAPTATION.md). Alternatively, you can submit an issue for new version adaption and I will try that if I have the binary. Note that only newer version adaption requests will be considered.
+
+
+To upgrade to the latest WMPF (WeChat version > 4.x), download the latest WeChat installer on `pc.weixin.qq.com`. The latest WMPF bundle is packaged with the installer.
+
+To upgrade to the latest WMPF (WeChat version < 4.x), type in `:showcmdwnd` in the search bar (do not hit enter), then the command window should pop up. Type in `/plugin set_grayvalue=202&check_update_force` and hit enter, the latest WMPF plugin should be downloaded, if any updates are available. Restart the WeChat to apply plugin upgrade.
+
+To debug web pages of WeChat embedded browser, please refer to [EXTENSION.md](EXTENSION.md). Note that this feature has many limitations currently and is simply a basic workaround.
+
+
+### Linux (x86_64) Support
+
+**Version histories:**
+
+* 25665 (latest, credit @Redbeanw44602)
+* 14978 (credit @Redbeanw44602)
+* 14910 (credit @CCLL-0x01)
+
+
+### macOS (arm64) Support
+
+**Version histories:**
+
+* 269136 (latest)
+
+
+To check WMPF version on macOS:
+
+```bash
+# Look for the number in the version string
+grep CFBundleVersion -A 1 "/Applications/WeChat.app/Contents/MacOS/WeChatAppEx.app/Contents/Info.plist"
+```
+
+
+## Prerequisites
+
+* node.js (requires at least LTS v22)
+    - yarn
+* chromium-based browsers (e.g., Chrome, Edge, etc.)
+
+## Quick Start
+
+**Step 1.** Clone this repo and install dependencies.
+
+```bash
+git clone https://github.com/evi0s/WMPFDebugger
+cd WMPFDebugger
+yarn
+```
+
+**Step 2.** Run `src/index.ts` to launch debug server and proxy server, and inject hook script to miniapp runtime.
+
+```bash
+npx ts-node src/index.ts
+```
+
+> Note: After this step, you need to launch the miniapp BEFORE launching the devtools, otherwise you will probably need to kill the server and redo the steps 2 to 4 again.
+
+**Step 3.** Launch any miniapp you would like to debug.
+
+**Step 4.** Open your chromium-based browsers, navigate to `devtools://devtools/bundled/inspector.html?ws=127.0.0.1:62000` and profit. You can change the CDP port `CDP_PORT` (62000 in this example) in `src/index.ts` to any port you like.
+
+## Screenshots
+
+![Console in DevTools](screenshots/console.png)
+
+![Sources in DevTools](screenshots/sources.png)
+
+## FAQ
+
+Please refer to [FAQ.zh.md](FAQ.zh.md) (Chinese only).
+
+Please READ THE FAQ CAREFULLY prior to submitting new issues!
+All newly submitted issues that have EXISTING SOLUTIONS in FAQ will be CLOSED WITHOUT ANY RESPONSE!
+
+## License & Attribution
+
+WMPFDebugger is licensed under the **GNU General Public License v2.0 (GPLv2)**.
+
+If you redistribute, modify, or publish a derivative version of this project, you **must comply with the GPLv2**, including preserving applicable copyright and license notices and fulfilling the GPLv2 source-code requirements when distributing covered binaries or modified versions.
+
+Please **do not remove existing attribution or contributor credits**. If your project is based on or derived from WMPFDebugger, we also ask that you clearly acknowledge **WMPFDebugger and its contributors** as the upstream project.
+
+> **GPLv2 compliance is a license requirement. Attribution beyond the requirements of the GPLv2 is respectfully requested in recognition of the work of all contributors.**
+
+
+## Disclaimer
+
+BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+The code in the `src/third-party` is extracted from `wechatdevtools` and fully copyrighted by Tencent Holdings Ltd.

@@ -1,0 +1,52 @@
+# Python environments, caches and build output
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+/build/
+/dist/
+
+# Node dependencies and downloaded native binaries
+node_modules/
+*.tsbuildinfo
+/vendor/WMPFDebugger/frida-prebuilt.tar.gz
+
+# Local editor, agent and OS files
+.idea/
+.vscode/
+.codex/
+.agents/
+.aws/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+
+# Credentials and machine-specific configuration
+.env
+.env.*
+!.env.example
+!.env.template
+*.pem
+*.key
+*.local.json
+
+# Logs and private location/route data (keep distributable examples)
+*.log
+logs/
+/location.json
+/location.*.json
+!/location.example.json
+/route.json
+/route.*.json
+!/route.example.json
+/routes/
+/local/
+/frida-example/
