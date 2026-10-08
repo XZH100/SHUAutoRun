@@ -1,154 +1,154 @@
-### **注意本库只能作为学习用途, 造成的任何问题与本库开发者无关, 如侵犯到你的权益，请联系删除。**
+# SHUAutoRun
+###注意本项目只能作为学习用途, 造成的任何问题与本库开发者无关, 如侵犯到你的权益，请联系删除。
+## 简介
+适用于上海中医药大学/上海大学的校园跑助手。
 
-### **注意本库只能作为学习用途, 造成的任何问题与本库开发者无关, 如侵犯到你的权益，请联系删除。**
+项目通过向小程序进程注入代码，修改小程序通过微信接口获得的位置数据实现“代跑”功能，
+非传统的模拟定位。
+若未来某日不在此小程序（华体运动汇）上进行记录校园跑，可能程序将失去作用。
 
-### **注意本库只能作为学习用途, 造成的任何问题与本库开发者无关, 如侵犯到你的权益，请联系删除。**
+注意：使用时其他小程序的定位也会受到波及。
+## 新手部署流程
 
----
+以下步骤面向 **Windows 10 / 11（64 位）**，命令均在 **PowerShell** 中运行。首次使用请按顺序操作；安装完成后，日常使用只需执行第 5 步。
 
-# 目录
+当前适配以 **微信 4.1.15.50 / WMPF 25773** 为基础，其他版本需以实际运行结果为准。
 
-> **路径运动面板**：`python main.py --route-panel --route-file route.example.json`
-> 可独立预览；`python main.py -x --panel --route-file route.example.json` 可接入微信。
-> 支持随机速度、左右漂移和循环，见 [路径运动说明](docs/route.md)。
+### 1. 安装运行环境
 
-> **微信 4.x 适配**：已接入新版 WMPF 调试后端，运行 `python main.py --check`
-> 查看实际运行时，再用 `python main.py -x` 启动。安装步骤、当前验收范围和浏览器
-> DevTools 用法见 [Windows 微信 4.x](docs/wechat4.md)。以下原有支持表仅针对旧版后端。
+先安装以下软件：
 
-> **模拟位置**：`python main.py -x --location-file location.example.json`。
-> 示例坐标为北京，使用前修改 JSON 中的经纬度；支持运行时更新和关闭。
-> 范围及恢复方法见 [模拟位置说明](docs/location.md)。
+| 软件 | 版本与安装说明 |
+| --- | --- |
+| [Python](https://www.python.org/downloads/windows/) | 本项目使用 Python 3.12（64 位）的环境完成开发。新手建议使用同一版本系列；安装时勾选 **Add python.exe to PATH**，并安装 Python Launcher。 |
+| [Node.js](https://nodejs.org/en/download) | 需要 22 或更高版本，本项目开发环境使用 24。选择 Windows x64 安装包，保留 npm 和 PATH 相关默认选项。 |
+| Windows 微信 | 安装后登录账号。 |
 
-[1. 支持版本列表](#%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E8%BF%90%E8%A1%8C%E7%89%88%E6%9C%AC)
+安装完成后，重新打开 PowerShell，逐行运行：
 
-[2. 如何查看当前运行版本?](#%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E8%BF%90%E8%A1%8C%E7%89%88%E6%9C%AC)
-  - [windows](#windows)
-  - [mac](#mac)
-    
-[3. 食用方法](#%E9%A3%9F%E7%94%A8%E6%96%B9%E6%B3%95)
-
- - [开启小程序F12](#%E9%A3%9F%E7%94%A8%E6%96%B9%E6%B3%95)
-
- - [开启微信内置浏览器F12](#%E5%BC%80%E5%90%AF%E5%BE%AE%E4%BF%A1%E5%86%85%E7%BD%AE%E6%B5%8F%E8%A7%88%E5%99%A8F12)
-
-[4. 常见问题](#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
-
-
----
-
-
-
-## 支持版本列表
-
-> 感谢志远大佬的WeChatOpenDevTool开源 代码只是把node改用python3重写，简单实现了一些自动化问题，重要代码都是原作者的。
-
-| Windows 微信版本 | 小程序版本 | 是否为最新版 |
-| ---------------- | ---------- | ------------ |
-|                 | 11275_x64   | ✅           |
-|                 | 11253_x64   | ✅           |
-|                 | 11205_x64   | ✅           |
-|                 | 11159_x64   | ✅           |
-| 3.9.10.19_x64    | 9129_x64   | ✅           |
-| 3.9.10.19_x64    | 9115_x64   | ✅           |
-| 3.9.10.19_x64    | 8555_x64   | ❌           |
-| 3.9.10.19_x64    | 9105_x64   | ❌           |
-| 3.9.9.43_x64     | 8555_x64   | ❌           |
-| 3.9.9.43_x64     | 9079_x64   | ❌           |
-| 3.9.8.25_x64     | 8531_x64   | ❌           |
-| 3.9.8.25_x64     | 8529_x64   | ❌           |
-| 3.9.8.25_x64     | 8519_x64   | ❌           |
-| 3.9.8.25_x64     | 8501_x64   | ❌           |
-| 3.9.8.25_x64     | 8461_x64   | ❌           |
-| 3.9.8.25_x64     | 8447_x64   | ❌           |
-
----
-
-
-| Mac x64微信版本              | 是否为最新版   | x             
-| ----------------            | ------------ | ------------ 
-| MacWechat/3.8.8(0x13080811) | ✅           | 源码运行            
-| MacWechat/3.8.8(0x13080812) | ✅           | 源码运行   
-
-
-## 如何查看当前运行版本？
-### windows
-  
-![image](./docs/images/version0.jpg)
-
-![image](./docs/images/version1.jpg)
-![image](./docs/images/version2.jpg)
-
-### mac
-```bash
-ps aux | grep 'WeChatAppEx' |  grep -v 'grep' | grep  "wmpf-mojo-handle" 
+```powershell
+py --version
+node --version
+npm.cmd --version
 ```
 
+三个命令都应显示版本号。若提示找不到命令，先确认软件已安装，再关闭并重新打开终端。
 
-## 食用方法
+### 2. 下载项目并打开终端
 
-### 开启小程序F12
+已经安装 Git 的用户也可以用以下命令下载：
 
-> ~~只支持windows版本微信~~，运行前先启动微信运行前先启动微信（建议小号,别被封了。。。)
-
-1. 安装python3版本
-2. 下载WeChatOpenDevTools-Python或直接下载编译好的exe
-   [WeChatOpenDevTools_64.exe](https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python/releases/)
-
-安装依赖
-
-```
-pip3  install -r requirements.txt
+```powershell
+git clone https://github.com/XZH100/SHUAutoRun.git
+cd SHUAutoRun
 ```
 
-运行✅
+**后续所有命令都在项目根目录执行。**
 
-```
-python main.py -x
-```
+### 3. 安装项目依赖（首次部署执行）
 
-![image](./docs/images/run.jpg)
-![image](./docs/images/MG38.jpg)
+逐行运行，等上一条命令结束且没有报错后，再执行下一条：
 
----
-
-### 开启微信内置浏览器F12
-
-```python
-python  main.py -c
+```powershell
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+npm.cmd --prefix vendor/WMPFDebugger ci
 ```
 
-![1709657739316](./docs/images/demo1.png)
+这里会创建项目专用的 Python 环境，并安装 Python 和 Node.js 依赖。下载可能需要一些时间。
 
-![1709657739316](./docs/images/demo2.png)
-
-![image](https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python/assets/132129852/04053f33-3e88-437b-a5c6-48683c984641)
-
----
-
-### 常见问题
-
-* 无法修改中文
-  
-  - yes
-* 提示找不到版本或微信未运行❌
-  
-  - 1. 请先看支持的微信版本和小程序版本
-       - 如果还有问题看：[微信版本和小程序版本都是符合要求的，但是仍然显示“未找到匹配版本的微信进程或微信未运行”](https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python/issues/38)
-    2. **如果微信版本相同小程序版本不同，就删除小程序版本目录并重启微信，直到刷出支持的小程序版本目录**
-    3. 最后回到上级目录，设置文件夹权限为只读，这样就能一直保持小程序版本一致
-       [image](https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python/assets/132129852/c2b793c3-6d81-424e-a167-3b1e584cef6f)
-* 怎么回退版本？
-  
-  - https://weixin.qq.com/cgi-bin/readtemplate?lang=zh_CN&t=weixin_faq_list&head=true
-  - https://github.com/tom-snow/wechat-windows-versions/releases
+后面的命令直接使用 `.venv` 中的 Python，**无需执行激活脚本，也无需修改 PowerShell 执行策略**。安装命令使用 `npm.cmd`，避免 PowerShell 将其解析为 `npm.ps1`。
 
 
-* mac版本闪退
-  -  ~~[macOS版本](https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python/releases/)不能和windows版本一样随时hook小程序修改F12，只能先加载小程序后再hook（必须是有小程序缓存了，不然会闪退）~~
-  - 可以先启动多个需要调试的小程序后再运行软件然后再刷新小程序
-* mac版本提示 [ Error: Unable to access process with pid xxx from the current user account](https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python/issues/49)
-## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=javeleyqaq/WeChatOpenDevTools-Python&type=Date)](https://star-history.com/#javeleyqaq/WeChatOpenDevTools-Python&Date)
+### 4. 连接微信并启动
 
+1. 登录微信，先打开任意一个小程序，让微信加载小程序运行环境。
+2. 在项目目录的 PowerShell 中检查运行时：
+
+   ```powershell
+   .\.venv\Scripts\python.exe main.py --check
+   ```
+
+   终端应列出 WMPF 版本和 PID。提示“需要自动检测偏移”表示启动时会尝试扫描，不代表检查失败，也不代表注入已经成功。
+
+3. 启动调试脚本和路径面板：
+
+   ```powershell
+   .\.venv\Scripts\python.exe main.py -x --panel --route-file route.example.json
+   ```
+4. 终端显示：
+    ```powershell
+    [location] 配置: 定位默认关闭，可由路径面板启用；等待小程序连接
+    [route] 网页面板: http://127.0.0.1:8766/#......
+    ```
+   点击网址可以打开跑步控制面板
+5. 等待终端出现 `[frida]script loaded [frida]you can now open any miniapps`，然后关闭并重新打开目标小程序，不要只最小化窗口。
+6. 打开终端打印的完整面板链接。`miniapp client connected` 表示已连接；再查看面板中的定位接口、地图蓝点和朝向状态。
+7. 小程序右下角会显示蓝色两行文字 `SHUAutoRun` / `controlled`。该标识表示注入连接，具体定位状态以面板提示为准。
+
+8. **路径加载后会立即将模拟位置固定在第一个点，速度为 0。** 网页中的“开始 / 继续”控制沿路线移动；未点击时保持静止。
+
+示例路线仅用于演示。请先在面板中导入自己的路线、确认起点，再按需启动目标小程序的记录功能及面板中的运动。
+
+使用期间保持脚本运行。关闭网页不会停止运动；要退出程序，请回到终端按 **Ctrl+C**。
+
+### 5. 准备自己的路线
+
+在项目目录中新建 `route.local.json`，用文本编辑器填入以下格式的内容，再替换为自己的坐标：
+
+```json
+{
+  "name": "我的路线",
+  "coordinateSystem": "gcj02",
+  "points": [
+    { "latitude": 31.319498, "longitude": 121.392710 },
+    { "latitude": 31.320498, "longitude": 121.392710 },
+    { "latitude": 31.320498, "longitude": 121.394710 }
+  ]
+}
+```
+
+- `latitude` 是纬度，`longitude` 是经度，顺序不要弄反。
+- `coordinateSystem` 必须与坐标来源一致：支持 `gcj02` 和 `wgs84`，不支持百度 BD09 坐标。
+- 至少需要两个不同的点，相邻点之间默认直线连接。
+- JSON 不支持注释，最后一项后面不要加逗号。保存时确认扩展名是 `.json`，不是 `.json.txt`。
+
+可以在网页面板中选择并导入文件，也可以启动时指定：
+
+```powershell
+.\.venv\Scripts\python.exe main.py -x --panel --route-file route.local.json
+```
+
+自带的`route.local.json`为SHU操场跑步路径
+
+### 6. 面板操作
+
+| 操作 | 效果 |
+| --- | --- |
+| 开始 / 继续 | 从当前位置沿路线移动；到终点后重新开始会回到起点。 |
+| 暂停 | 保持当前位置，速度变为 0。 |
+| 回到起点 | 清零进度，定位到第一个点并保持静止。 |
+| 停止模拟 | 关闭位置替换，恢复原定位接口；如需恢复原持续定位，请重新打开小程序。 |
+| 应用参数 | 保存面板中修改的速度、漂移、循环和方向设置。 |
+
+默认速度为 **12 ± 3 km/h**，横向随机漂移范围为路径左右 **0–3 米**。开启循环后，到达终点会直接回到起点继续。
+
+手机朝向默认跟随当前路段方向，也可以手动输入固定角度：北为 0°、东为 90°、南为 180°、西为 270°。
+
+面板显示的是模拟器生成的路线；是否成功传入小程序，还需查看连接与接口确认状态。
+
+需要更详细的日志时，使用：
+
+```powershell
+.\.venv\Scripts\python.exe main.py -x --panel --route-file route.local.json --debug
+```
+
+更多说明：[路径文件与运动规则](docs/route.md) · [模拟位置与地图适配](docs/location.md) · [微信 4.x 调试说明](docs/wechat4.md)。
+
+## 致谢 / 站在巨人的肩上
+
+魔改自 [JaveleyQAQ/WeChatOpenDevTools-Python](https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python/) 感谢原项目及其所以贡献者。
+
+新版调试后端基于 [evi0s/WMPFDebugger](https://github.com/evi0s/WMPFDebugger)。第三方来源与许可说明见 [THIRD_PARTY.md](THIRD_PARTY.md)，后端许可证保留在 [vendor/WMPFDebugger/LICENSE](vendor/WMPFDebugger/LICENSE)。
