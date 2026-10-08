@@ -1,10 +1,52 @@
 {
-  "name": "矩形示例路线",
+  "name": "校园跑",
   "coordinateSystem": "gcj02",
   "points": [
-    { "latitude": 31.319498, "longitude": 121.392710 },
-    { "latitude": 31.320498, "longitude": 121.392710 },
-    { "latitude": 31.320498, "longitude": 121.394710 },
-    { "latitude": 31.319498, "longitude": 121.394710 }
+    {
+      "latitude": 31.319434,
+      "longitude": 121.392733
+    },
+    {
+      "latitude": 31.318637,
+      "longitude": 121.392784
+    },
+    {
+      "latitude": 31.318478,
+      "longitude": 121.392923
+    },
+    {
+      "latitude": 31.318397,
+      "longitude": 121.393214
+    },
+    {
+      "latitude": 31.318512,
+      "longitude": 121.393480
+    },
+    {
+      "latitude": 31.318669,
+      "longitude": 121.393577
+    },
+    {
+      "latitude": 31.319486,
+      "longitude": 121.393526
+    },
+    {
+      "latitude": 31.319656,
+      "longitude": 121.393391
+    },
+    {
+      "latitude": 31.319738,
+      "longitude": 121.393150
+    }
+,
+    {
+      "latitude": 31.319649,
+      "longitude": 121.392884
+    },
+    {
+      "latitude": 31.319434,
+      "longitude": 121.392733
+    }
+
   ]
 }
